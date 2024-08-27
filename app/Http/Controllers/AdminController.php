@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Mail;
+use App\Models\Admin;
+use App\Mail\Websitemail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -71,6 +74,25 @@ class AdminController extends Controller
      *
      */
     public function AdminPasswordSubmit(Request $request){
+        $request->validate([
+            'email' => 'required|email'
+        ]);
+        $admin_data = Admin::where('email', $request->email)->first();
+        if(!$admin_data){
+            return redirect()->back()->with('error','Email Not Found');
+        }
+        $token = hash('sha256',time());
+        $admin_data ->token = $token;
+
+        $admin_data->update();
+
+        $reset_link = url('admin/reset-password/'.$token.'/'.$request->email);
+        $subject = "Reset Password";
+        $message = "Please Click on Link Below to reset Password<br>";
+        $message .= "<a href='".$reset_link. " '> Click here </a>";
+
+        \Mail::to($request->email)->send(new Websitemail($subject, $message));
+        return redirect()->back()->with('success', 'Reset Password Link Send on your Email');
 
 
     }
