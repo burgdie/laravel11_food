@@ -24,3 +24,4 @@ Route::get('/admin/dashboard', [AdminController::class, 'AdminDashboard'])->name
 
 Route::get('/admin/login', [AdminController::class, 'AdminLogin'])->name('admin.login');
 Route::post('/admin/login_submit', [AdminController::class, 'AdminLoginSubmit'])->name('admin.login_submit');
+Route::get('/admin/logout', [AdminController::class, 'AdminLogout'])->name('admin.logout');

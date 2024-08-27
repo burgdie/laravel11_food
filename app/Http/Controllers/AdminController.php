@@ -50,4 +50,14 @@ class AdminController extends Controller
 
     }
 
+    /**
+     *
+     */
+    public function AdminLogout(){
+        echo('AdminLogout');
+        Auth::guard('admin')->logout();
+        return redirect()->route('admin.login')->with('success', 'Logout Success');
+
+    }
+
 }
